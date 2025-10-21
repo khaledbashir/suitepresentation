@@ -1,27 +1,44 @@
 {
-  "name": "suite",
-  "version": "0.1.0",
+  "name": "react-basic-next",
+  "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev --turbopack",
-    "build": "next build --turbopack",
+    "dev": "next dev -p 4567",
+    "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "next lint"
   },
   "dependencies": {
-    "react": "19.1.0",
-    "react-dom": "19.1.0",
-    "next": "15.5.6"
+    "@blocksuite/blocks": "0.15.0-canary-202406291027-8aed732",
+    "@blocksuite/presets": "0.15.0-canary-202406291027-8aed732",
+    "@blocksuite/store": "0.15.0-canary-202406291027-8aed732",
+    "@codemirror/lang-html": "^6.4.11",
+    "@udecode/plate-alignment": "^49.0.0",
+    "@udecode/plate-basic-elements": "^49.0.0",
+    "@udecode/plate-basic-marks": "^49.0.0",
+    "@udecode/plate-common": "^42.0.0",
+    "@udecode/plate-heading": "^49.0.0",
+    "@udecode/plate-indent": "^49.0.0",
+    "@udecode/plate-link": "^49.0.0",
+    "@udecode/plate-list": "^49.0.0",
+    "@udecode/plate-media": "^49.0.0",
+    "@udecode/plate-paragraph": "^36.0.0",
+    "@udecode/plate-table": "^49.0.0",
+    "@uiw/codemirror-theme-vscode": "^4.25.2",
+    "@uiw/react-codemirror": "^4.25.2",
+    "next": "14.2.3",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
-    "typescript": "^5",
-    "@types/node": "^20",
-    "@types/react": "^19",
-    "@types/react-dom": "^19",
-    "@tailwindcss/postcss": "^4",
-    "tailwindcss": "^4",
-    "eslint": "^9",
-    "eslint-config-next": "15.5.6",
-    "@eslint/eslintrc": "^3"
+    "@types/node": "^20.12.12",
+    "@types/react": "^18.3.2",
+    "@types/react-dom": "^18.3.0",
+    "eslint": "^8.57.0",
+    "eslint-config-next": "14.2.3",
+    "typescript": "^5.4.5"
+  },
+  "stackblitz": {
+    "startCommand": "pnpm i && pnpm dev"
   }
 }
