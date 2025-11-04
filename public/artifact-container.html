@@ -1,0 +1,78 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta http-equiv="Content-Security-Policy" content="default-src 'none'; style-src 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; script-src 'self' 'unsafe-inline'; connect-src 'none'; frame-ancestors 'self'; base-uri 'none'; form-action 'none'; object-src 'none'" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Artifact Preview</title>
+    <style>
+      :root { color-scheme: light dark; }
+      html, body { height: 100%; }
+      body {
+        margin: 0;
+        background: #ffffff;
+        color: #111827;
+        font-family: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto,
+          Ubuntu, Cantarell, Noto Sans, sans-serif, Apple Color Emoji,
+          Segoe UI Emoji;
+        line-height: 1.5;
+      }
+      .container { padding: 16px; box-sizing: border-box; min-height: 100%; }
+      .error { color: #b91c1c; background: #fee2e2; padding: 12px; border-radius: 8px; }
+      .muted { color: #6b7280; font-size: 0.875rem; }
+      .code { font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace; }
+    </style>
+  </head>
+  <body>
+    <div id="root" class="container">
+      <div class="muted">Waiting for preview content…</div>
+      <noscript>
+        <div class="error">JavaScript is required to render the preview.</div>
+      </noscript>
+    </div>
+    <script>
+      (function () {
+        const root = document.getElementById('root');
+        const MAX_SIZE = 200 * 1024; // 200KB safety cap
+
+        function showError(msg) {
+          root.innerHTML = '<div class="error" role="alert"></div>';
+          root.firstChild.textContent = String(msg);
+        }
+
+        function render(html) {
+          try {
+            // Replace content with provided HTML. Assumes parent iframe applies sandbox.
+            root.innerHTML = html;
+          } catch (e) {
+            showError('Render error: ' + (e && e.message ? e.message : String(e)));
+          }
+        }
+
+        window.addEventListener('message', function (event) {
+          try {
+            // Enforce same-origin only
+            if (event.origin !== window.location.origin) return;
+            var data = event.data || {};
+            if (data && data.type === 'artifact:html' && typeof data.html === 'string') {
+              if (data.html.length > MAX_SIZE) {
+                showError('Preview too large to display.');
+                return;
+              }
+              render(data.html);
+            }
+          } catch (e) {
+            showError('Message error: ' + (e && e.message ? e.message : String(e)));
+          }
+        });
+
+        // Notify parent that container is ready to receive content
+        try {
+          if (window.parent && window.parent !== window) {
+            window.parent.postMessage({ type: 'artifact:ready' }, window.location.origin);
+          }
+        } catch (_) { /* ignore */ }
+      })();
+    </script>
+  </body>
+</html>
